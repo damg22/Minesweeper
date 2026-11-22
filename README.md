@@ -1,6 +1,9 @@
 # Minesweeper
 
-A classic-style Minesweeper in Python + pygame.
+A classic-style Minesweeper in Python + pygame. Free downloads for Windows and Mac,
+no Python needed. **[Website and downloads →](https://damg22.github.io/Minesweeper/)**
+
+<img src="docs/images/demo.gif" width="296" alt="Minesweeper being played: the first click opens an area, then flags are placed until the board is cleared.">
 
 ## Download and play (no Python needed)
 

@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Minesweeper in Python (pygame) – Free Download for Windows &amp; Mac</title>
+  <meta name="description" content="Classic Minesweeper written in Python and pygame. Free download for Windows and Mac, no Python needed. Beginner, Intermediate, Expert and custom boards, safe first click, open source.">
+  <link rel="canonical" href="https://damg22.github.io/Minesweeper/">
+
+  <!-- Link previews (Discord, Reddit, iMessage, X…) -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Minesweeper in Python – Free for Windows &amp; Mac">
+  <meta property="og:description" content="The classic puzzle game, written in Python + pygame. Free and open source.">
+  <meta property="og:url" content="https://damg22.github.io/Minesweeper/">
+  <meta property="og:image" content="https://damg22.github.io/Minesweeper/images/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cg stroke='%23000' stroke-width='3'%3E%3Cpath d='M16 2v28M2 16h28M6 6l20 20M26 6 6 26'/%3E%3C/g%3E%3Ccircle cx='16' cy='16' r='9'/%3E%3Crect x='11' y='11' width='4' height='4' fill='%23fff'/%3E%3C/svg%3E">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Minesweeper",
+    "description": "Classic Minesweeper written in Python and pygame.",
+    "applicationCategory": "GameApplication",
+    "operatingSystem": "Windows, macOS",
+    "url": "https://damg22.github.io/Minesweeper/",
+    "downloadUrl": "https://github.com/damg22/Minesweeper/releases/latest",
+    "screenshot": "https://damg22.github.io/Minesweeper/images/playing.png",
+    "license": "https://opensource.org/licenses/MIT",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #f4f4f1;
+      --surface: #ffffff;
+      --ink: #15171c;
+      --muted: #5a606b;
+      --line: #dcdcd6;
+      --accent: #c40000;
+      --tile: #c0c0c0;
+      --tile-light: #ffffff;
+      --tile-dark: #808080;
+      --code-bg: #ececE7;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #17191e;
+        --surface: #1f2228;
+        --ink: #eceef2;
+        --muted: #a2a8b3;
+        --line: #30343c;
+        --accent: #ff5a5a;
+        --code-bg: #262a31;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #17191e; --surface: #1f2228; --ink: #eceef2; --muted: #a2a8b3;
+      --line: #30343c; --accent: #ff5a5a; --code-bg: #262a31;
+    }
+
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    a { color: inherit; }
+    img { max-width: 100%; height: auto; display: block; image-rendering: pixelated; }
+    .wrap { max-width: 1060px; margin: 0 auto; padding: 0 16px; }
+
+    /* ---------- header ---------- */
+    header { border-bottom: 1px solid var(--line); }
+    header .wrap { display: flex; align-items: center; justify-content: space-between; height: 56px; }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; text-decoration: none; }
+    .brand svg { width: 22px; height: 22px; }
+    header nav a { color: var(--muted); text-decoration: none; margin-left: 20px; font-size: 15px; }
+    header nav a:hover { color: var(--ink); }
+
+    /* ---------- hero ---------- */
+    .hero { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: center; padding: 56px 0 40px; }
+    h1 { font-size: clamp(40px, 6vw, 64px); line-height: 1.05; margin: 0 0 16px; letter-spacing: -0.02em; }
+    .lede { font-size: 20px; color: var(--muted); margin: 0 0 28px; max-width: 34ch; }
+    .shot { border: 1px solid var(--line); box-shadow: 0 12px 40px rgb(0 0 0 / 0.18); }
+    .hero .shot { max-width: 420px; justify-self: center; width: 100%; }
+
+    /* classic bevelled buttons */
+    .downloads { display: flex; flex-direction: column; gap: 10px; max-width: 360px; }
+    .btn {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 12px 16px;
+      background: var(--tile); color: #000; text-decoration: none; font-weight: 650;
+      border: 3px solid; border-color: var(--tile-light) var(--tile-dark) var(--tile-dark) var(--tile-light);
+    }
+    .btn small { font-weight: 500; color: #333; font-size: 13px; }
+    .btn:active { border-color: var(--tile-dark) var(--tile-light) var(--tile-light) var(--tile-dark); }
+    .btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+    .btn.recommended { box-shadow: 0 0 0 3px var(--accent); }
+    .btn .tag { display: none; font-size: 12px; color: #fff; background: var(--accent); padding: 1px 7px; }
+    .btn.recommended .tag { display: inline; }
+    .note { font-size: 14px; color: var(--muted); margin: 14px 0 0; max-width: 46ch; }
+    #os-note:empty { display: none; }
+
+    /* ---------- sections ---------- */
+    section { padding: 48px 0; border-top: 1px solid var(--line); }
+    h2 { font-size: 28px; margin: 0 0 20px; letter-spacing: -0.01em; }
+    h3 { font-size: 18px; margin: 0 0 6px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+    .card { background: var(--surface); border: 1px solid var(--line); padding: 20px; }
+    .card p { margin: 0; color: var(--muted); }
+    ol { margin: 0; padding-left: 20px; color: var(--muted); }
+    li { margin: 4px 0; }
+    strong { color: var(--ink); }
+
+    table { border-collapse: collapse; width: 100%; max-width: 560px; background: var(--surface); border: 1px solid var(--line); }
+    td { padding: 10px 14px; border-bottom: 1px solid var(--line); }
+    td:first-child { width: 55%; }
+    tr:last-child td { border-bottom: 0; }
+    kbd {
+      font: 600 13px/1 ui-monospace, Menlo, Consolas, monospace;
+      background: var(--tile); color: #000; padding: 3px 6px;
+      border: 2px solid; border-color: var(--tile-light) var(--tile-dark) var(--tile-dark) var(--tile-light);
+    }
+
+    .gallery { display: grid; grid-template-columns: 1fr 0.6fr; gap: 20px; align-items: start; }
+    .gallery figure { margin: 0; }
+    .gallery .wide { grid-column: 1 / -1; }
+    figcaption { font-size: 14px; color: var(--muted); margin-top: 8px; }
+
+    pre {
+      background: var(--code-bg); border: 1px solid var(--line); padding: 16px;
+      overflow-x: auto; font: 14px/1.6 ui-monospace, Menlo, Consolas, monospace; margin: 0 0 16px;
+    }
+    footer { padding: 32px 0 48px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); }
+
+    @media (max-width: 760px) {
+      .hero { grid-template-columns: 1fr; gap: 32px; padding-top: 36px; }
+      .hero .shot { max-width: 340px; }
+      .downloads { max-width: none; }
+      .gallery { grid-template-columns: 1fr; }
+      header nav a:not(:last-child) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="brand" href="./">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><g stroke="currentColor" stroke-width="3"><path d="M16 2v28M2 16h28M6 6l20 20M26 6 6 26"/></g><circle cx="16" cy="16" r="9" fill="currentColor"/><rect x="11" y="11" width="4" height="4" fill="var(--bg)"/></svg>
+      Minesweeper
+    </a>
+    <nav>
+      <a href="#how-to-play">How to play</a>
+      <a href="#screenshots">Screenshots</a>
+      <a href="https://github.com/damg22/Minesweeper">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="hero">
+    <div>
+      <h1>Minesweeper</h1>
+      <p class="lede">The classic puzzle game, written in Python. Free for Windows and Mac, with nothing else to install.</p>
+
+      <div class="downloads">
+        <a class="btn" data-os="windows" href="https://github.com/damg22/Minesweeper/releases/latest/download/Minesweeper-windows.exe">
+          <span>Download for Windows <span class="tag">For you</span></span><small>.exe</small>
+        </a>
+        <a class="btn" data-os="mac-arm" href="https://github.com/damg22/Minesweeper/releases/latest/download/Minesweeper-macos-apple-silicon.zip">
+          <span>Mac · Apple Silicon <span class="tag">For you</span></span><small>M1 or newer</small>
+        </a>
+        <a class="btn" data-os="mac-intel" href="https://github.com/damg22/Minesweeper/releases/latest/download/Minesweeper-macos-intel.zip">
+          <span>Mac · Intel <span class="tag">For you</span></span><small>2019 or older</small>
+        </a>
+      </div>
+      <p class="note" id="os-note"></p>
+      <p class="note">Free and open source (MIT). <a href="https://github.com/damg22/Minesweeper/releases">All releases</a></p>
+    </div>
+
+    <img class="shot" src="images/demo.gif" width="592" height="776"
+         alt="Animated Minesweeper game: the first click opens an area, then flags are placed and the board is cleared.">
+  </div>
+
+  <section id="first-launch">
+    <h2>First launch</h2>
+    <p class="note" style="margin:0 0 20px">The apps aren't signed with a paid certificate, so your computer asks once before opening them.</p>
+    <div class="grid">
+      <div class="card">
+        <h3>Windows</h3>
+        <ol>
+          <li>Open <strong>Minesweeper-windows.exe</strong>.</li>
+          <li>If you see “Windows protected your PC”, click <strong>More info</strong>.</li>
+          <li>Click <strong>Run anyway</strong>.</li>
+        </ol>
+      </div>
+      <div class="card">
+        <h3>Mac</h3>
+        <ol>
+          <li>Unzip the download.</li>
+          <li>Right-click <strong>Minesweeper.app</strong> → <strong>Open</strong> → <strong>Open</strong>.</li>
+          <li>Still blocked? <strong>System Settings → Privacy &amp; Security → Open Anyway</strong>.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section id="how-to-play">
+    <h2>How to play</h2>
+    <p class="note" style="margin:0 0 20px">Open every cell without a mine and flag all the mines. Each number tells you how many mines touch that cell, diagonals included.</p>
+    <table>
+      <tr><td>Left click</td><td>Open a cell</td></tr>
+      <tr><td>Right click <span class="note">or</span> <kbd>Ctrl</kbd>/<kbd>⌘</kbd> + click</td><td>Place or remove a flag</td></tr>
+      <tr><td>Smiley, <kbd>F2</kbd> or <kbd>N</kbd></td><td>New game</td></tr>
+      <tr><td><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd></td><td>Beginner / Intermediate / Expert</td></tr>
+      <tr><td><kbd>Esc</kbd></td><td>Quit</td></tr>
+    </table>
+  </section>
+
+  <section id="features">
+    <h2>Features</h2>
+    <div class="grid">
+      <div class="card"><h3>Three classic sizes</h3><p>Beginner 9×9, Intermediate 16×16 and Expert 30×16, plus custom boards from the command line.</p></div>
+      <div class="card"><h3>Safe first click</h3><p>Mines are placed after your first click, so you never lose on move one.</p></div>
+      <div class="card"><h3>The classic look</h3><p>Bevelled tiles, red LED counters and a smiley that reacts to every click.</p></div>
+      <div class="card"><h3>Small and fast</h3><p>A single download that starts in a second. No Python or other setup required.</p></div>
+    </div>
+  </section>
+
+  <section id="screenshots">
+    <h2>Screenshots</h2>
+    <div class="gallery">
+      <figure>
+        <img class="shot" src="images/playing.png" width="1012" height="1196" loading="lazy" alt="Intermediate board in progress with numbers and flags.">
+        <figcaption>Intermediate, mid-game</figcaption>
+      </figure>
+      <figure>
+        <img class="shot" src="images/win.png" width="592" height="776" loading="lazy" alt="Beginner board cleared, the smiley wearing sunglasses.">
+        <figcaption>A win: every mine flagged</figcaption>
+      </figure>
+      <figure class="wide">
+        <img class="shot" src="images/loss.png" width="1852" height="1196" loading="lazy" alt="Expert board after a loss showing all mines, the clicked mine in red and wrong flags crossed out.">
+        <figcaption>Expert, after a loss: the clicked mine in red, wrong flags crossed out</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="source">
+    <h2>For developers</h2>
+    <p class="note" style="margin:0 0 16px">Built with Python 3 and pygame. Run it from source:</p>
+    <pre><code>git clone https://github.com/damg22/Minesweeper.git
+cd Minesweeper
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+.venv/bin/python main.py -d expert</code></pre>
+    <p class="note" style="margin:0"><a href="https://github.com/damg22/Minesweeper">Source code on GitHub</a> · MIT license</p>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">Minesweeper by <a href="https://github.com/damg22">damg22</a> · Made with Python and pygame</div>
+</footer>
+
+<script>
+  // Highlight the download that matches the visitor's computer.
+  (function () {
+    var plat = ((navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "") + " " + navigator.userAgent;
+    var note = document.getElementById("os-note");
+    var pick = null;
+
+    if (/iPhone|iPad|Android/i.test(plat)) {
+      note.textContent = "Minesweeper runs on Windows and Mac computers. Open this page on one to download.";
+    } else if (/Win/i.test(plat)) {
+      pick = "windows";
+    } else if (/Mac/i.test(plat)) {
+      pick = "mac-arm";
+      try {  // Chrome and Firefox reveal the graphics chip; Safari doesn't, so Apple Silicon stays the default.
+        var gl = document.createElement("canvas").getContext("webgl");
+        var ext = gl && gl.getExtension("WEBGL_debug_renderer_info");
+        var gpu = ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) : "";
+        if (/Intel|AMD|Radeon/i.test(gpu)) pick = "mac-intel";
+      } catch (e) {}
+      note.textContent = "Not sure which Mac you have? Apple menu → About This Mac: “Chip: Apple M…” means Apple Silicon.";
+    } else if (/Linux/i.test(plat)) {
+      note.textContent = "No Linux download yet. You can run it from source in a minute (see below).";
+    }
+    if (pick) document.querySelector('[data-os="' + pick + '"]').classList.add("recommended");
+  })();
+</script>
+</body>
+</html>
