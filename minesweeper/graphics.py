@@ -108,11 +108,13 @@ def build_tiles(T=S.TILE):
     _draw_mine(s, T)
     tiles["mine_exploded"] = s
 
-    s = _sunken(T)
-    _draw_mine(s, T)
-    m, w = int(T * 0.18), max(2, T // 12)
-    pygame.draw.line(s, S.RED, (m, m), (T - m, T - m), w)
-    pygame.draw.line(s, S.RED, (m, T - m), (T - m, m), w)
+    # Wrong flag: the flag the player placed, crossed out (there was no mine here).
+    s = _raised(T)
+    _draw_flag(s, T)
+    m, w = int(T * 0.16), max(2, T // 12)
+    for color, width in ((S.WHITE, w + 2), (S.RED, w)):   # white outline keeps the X visible over the red flag
+        pygame.draw.line(s, color, (m, m), (T - m, T - m), width)
+        pygame.draw.line(s, color, (m, T - m), (T - m, m), width)
     tiles["flag_wrong"] = s
 
     return tiles
