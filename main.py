@@ -1,11 +1,14 @@
 import argparse
+import asyncio
+
+import pygame  # noqa: F401  (imported here so the browser build, pygbag, knows to load pygame)
 
 from minesweeper import settings as S
 from minesweeper.game import Game
 from minesweeper.ui import App
 
 
-def main():
+async def main():
     p = argparse.ArgumentParser(description="Minesweeper")
     p.add_argument("-d", "--difficulty", choices=S.DIFFICULTIES, default="beginner")
     p.add_argument("--custom", nargs=3, type=int, metavar=("ROWS", "COLS", "MINES"),
@@ -27,8 +30,9 @@ def main():
         from minesweeper.preview import PreviewGame
         factory = PreviewGame
 
-    App(difficulty=args.difficulty, custom=custom, game_factory=factory).run()
+    await App(difficulty=args.difficulty, custom=custom, game_factory=factory).run_async()
 
 
+# pygbag (the browser build) needs an async main() started with asyncio.run().
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

@@ -28,7 +28,6 @@ import random
 from collections import deque
 from dataclasses import dataclass
 from enum import Enum, auto
-from sre_parse import State
 
 
 class CellState(Enum):

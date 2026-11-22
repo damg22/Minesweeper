@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Minesweeper in Python (pygame) – Free Download for Windows &amp; Mac</title>
-  <meta name="description" content="Classic Minesweeper written in Python and pygame. Free download for Windows and Mac, no Python needed, plus a free classroom starter kit where students write the game logic.">
+  <title>Minesweeper in Python (pygame) – Play Online or Download for Windows &amp; Mac</title>
+  <meta name="description" content="Classic Minesweeper written in Python and pygame. Play free in your browser or download it for Windows and Mac, plus a free classroom starter kit where students write the game logic.">
   <link rel="canonical" href="https://damg22.github.io/Minesweeper/">
 
   <!-- Link previews (Discord, Reddit, iMessage, X…) -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Minesweeper in Python – Free for Windows &amp; Mac">
-  <meta property="og:description" content="The classic puzzle game, written in Python + pygame. Free and open source.">
+  <meta property="og:title" content="Minesweeper in Python – Play Online, Free">
+  <meta property="og:description" content="The classic puzzle game, written in Python + pygame. Play in your browser or download for Windows and Mac.">
   <meta property="og:url" content="https://damg22.github.io/Minesweeper/">
   <meta property="og:image" content="https://damg22.github.io/Minesweeper/images/og.png">
   <meta property="og:image:width" content="1200">
@@ -26,7 +26,7 @@
     "name": "Minesweeper",
     "description": "Classic Minesweeper written in Python and pygame.",
     "applicationCategory": "GameApplication",
-    "operatingSystem": "Windows, macOS",
+    "operatingSystem": "Windows, macOS, Web browser",
     "url": "https://damg22.github.io/Minesweeper/",
     "downloadUrl": "https://github.com/damg22/Minesweeper/releases/latest",
     "screenshot": "https://damg22.github.io/Minesweeper/images/playing.png",
@@ -103,6 +103,10 @@
     .btn:active { border-color: var(--tile-dark) var(--tile-light) var(--tile-light) var(--tile-dark); }
     .btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
     .btn.recommended { box-shadow: 0 0 0 3px var(--accent); }
+    .btn.play { background: #1f8a3b; color: #fff; padding: 16px; font-size: 18px;
+                border-color: #5fd17e #0d4a1c #0d4a1c #5fd17e; }
+    .btn.play small { color: #dff5e5; }
+    .btn.play:active { border-color: #0d4a1c #5fd17e #5fd17e #0d4a1c; }
     .btn .tag { display: none; font-size: 12px; color: #fff; background: var(--accent); padding: 1px 7px; }
     .btn.recommended .tag { display: inline; }
     .note { font-size: 14px; color: var(--muted); margin: 14px 0 0; max-width: 46ch; }
@@ -166,6 +170,7 @@
       Minesweeper
     </a>
     <nav>
+      <a href="play/">Play online</a>
       <a href="#how-to-play">How to play</a>
       <a href="#screenshots">Screenshots</a>
       <a href="#teachers">For teachers</a>
@@ -179,7 +184,14 @@
   <div class="hero">
     <div>
       <h1>Minesweeper</h1>
-      <p class="lede">The classic puzzle game, written in Python. Free for Windows and Mac, with nothing else to install.</p>
+      <p class="lede">The classic puzzle game, written in Python. Play it right here in your browser, or download it for Windows and Mac.</p>
+
+      <div class="downloads">
+        <a class="btn play" href="play/">
+          <span>▶ Play in your browser</span><small>no download</small>
+        </a>
+      </div>
+      <p class="note" style="margin:10px 0 18px">Best with a mouse: right-click places flags. The first load takes a few seconds.</p>
 
       <div class="downloads">
         <a class="btn" data-os="windows" href="https://github.com/damg22/Minesweeper/releases/latest/download/Minesweeper-windows.exe">
@@ -241,7 +253,7 @@
       <div class="card"><h3>Three classic sizes</h3><p>Beginner 9×9, Intermediate 16×16 and Expert 30×16, plus custom boards from the command line.</p></div>
       <div class="card"><h3>Safe first click</h3><p>Mines are placed after your first click, so you never lose on move one.</p></div>
       <div class="card"><h3>The classic look</h3><p>Bevelled tiles, red LED counters and a smiley that reacts to every click.</p></div>
-      <div class="card"><h3>Small and fast</h3><p>A single download that starts in a second. No Python or other setup required.</p></div>
+      <div class="card"><h3>Play anywhere</h3><p>Right here in your browser, or as a small download for Windows and Mac. No Python or other setup required.</p></div>
     </div>
   </section>
 
@@ -331,7 +343,7 @@ python3 -m venv .venv
     var pick = null;
 
     if (/iPhone|iPad|Android/i.test(plat)) {
-      note.textContent = "Minesweeper runs on Windows and Mac computers. Open this page on one to download.";
+      note.textContent = "The downloads are for Windows and Mac computers. You can open the browser version on a phone, but placing flags needs a right-click.";
     } else if (/Win/i.test(plat)) {
       pick = "windows";
     } else if (/Mac/i.test(plat)) {
@@ -344,7 +356,7 @@ python3 -m venv .venv
       } catch (e) {}
       note.textContent = "Not sure which Mac you have? Apple menu → About This Mac: “Chip: Apple M…” means Apple Silicon.";
     } else if (/Linux/i.test(plat)) {
-      note.textContent = "No Linux download yet. You can run it from source in a minute (see below).";
+      note.textContent = "No Linux download yet. Play in your browser above, or run it from source (see below).";
     }
     if (pick) document.querySelector('[data-os="' + pick + '"]').classList.add("recommended");
   })();

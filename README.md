@@ -1,7 +1,9 @@
 # Minesweeper
 
-A classic-style Minesweeper in Python + pygame. Free downloads for Windows and Mac,
-no Python needed. **[Website and downloads →](https://damg22.github.io/Minesweeper/)**
+A classic-style Minesweeper in Python + pygame.
+
+**[▶ Play it in your browser](https://damg22.github.io/Minesweeper/play/)** · or download it for
+Windows and Mac, no Python needed · **[Website](https://damg22.github.io/Minesweeper/)**
 
 <img src="docs/images/demo.gif" width="296" alt="Minesweeper being played: the first click opens an area, then flags are placed until the board is cleared.">
 
@@ -80,6 +82,7 @@ education/
   build_starter.py       builds dist/minesweeper-starter.zip
 docs/                    GitHub Pages website
 tools/make_screenshots.py  regenerates the website images from real games
+tools/build_web.py       builds the browser version with pygbag (WebAssembly)
 ```
 
 ## What the UI expects from `Game`
@@ -93,6 +96,24 @@ tools/make_screenshots.py  regenerates the website images from real games
 The timer starts when `status` becomes `PLAYING` and stops on `WON` or `LOST`.
 On `LOST` the UI shows all mines and crosses out wrong flags. On `WON` it shows
 every mine as a flag. The logic only needs to set the state.
+
+## The website and browser version
+
+`.github/workflows/pages.yml` publishes the site on every push to `main`: the
+pages in `docs/`, plus the browser build of the game at `/play/`. It's made by
+[pygbag](https://pypi.org/project/pygbag/), which runs pygame on WebAssembly.
+One-time setup: **Settings → Pages → Source: GitHub Actions**.
+
+To try the browser version locally:
+
+```bash
+.venv/bin/pip install pygbag==0.9.3
+.venv/bin/python tools/build_web.py --serve      # then open http://localhost:8000
+```
+
+Two things the browser build relies on: `main.py` runs an async loop
+(`App.run_async`) so the page stays responsive, and it imports `pygame` directly,
+which is how pygbag knows to load it.
 
 ## Publishing a new release
 

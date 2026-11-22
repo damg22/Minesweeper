@@ -13,6 +13,9 @@ Controls
   Esc ............................. quit
 """
 
+import asyncio
+import random
+import sys
 import time
 
 import pygame
@@ -21,12 +24,18 @@ from . import graphics as gfx
 from . import settings as S
 from .game import CellState, Game, GameStatus
 
+IS_WEB = sys.platform == "emscripten"   # running in the browser via pygbag
+
 LED_H = 30
 MENU_ITEMS = [("Beginner", "beginner"), ("Intermediate", "intermediate"), ("Expert", "expert")]
 
 
 class App:
     def __init__(self, difficulty="beginner", custom=None, game_factory=Game):
+        if IS_WEB:
+            # pygbag starts Python's random module from the same seed on every page
+            # load, which would give every visitor the same boards.
+            random.seed(time.time_ns())
         pygame.init()
         pygame.display.set_caption("Minesweeper")
         self.clock = pygame.time.Clock()
@@ -130,10 +139,10 @@ class App:
 
     # ------------------------------------------------------------------ input
     def handle_event(self, e):
-        if e.type == pygame.QUIT:
+        if e.type == pygame.QUIT and not IS_WEB:
             return False
         if e.type == pygame.KEYDOWN:
-            if e.key == pygame.K_ESCAPE:
+            if e.key == pygame.K_ESCAPE and not IS_WEB:   # quitting a web page just leaves it blank
                 return False
             if e.key in (pygame.K_F2, pygame.K_n):
                 self.new_game()
@@ -290,7 +299,9 @@ class App:
         pygame.display.flip()
 
     # ------------------------------------------------------------------- loop
-    def run(self):
+    async def run_async(self):
+        """Main loop. Async so the browser build (pygbag) gets control back every
+        frame; on desktop it runs exactly like a normal loop."""
         running = True
         while running:
             for e in pygame.event.get():
@@ -300,4 +311,8 @@ class App:
             if running:
                 self.render()
                 self.clock.tick(S.FPS)
+                await asyncio.sleep(0)
         pygame.quit()
+
+    def run(self):
+        asyncio.run(self.run_async())
