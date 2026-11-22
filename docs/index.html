@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Minesweeper in Python (pygame) – Free Download for Windows &amp; Mac</title>
-  <meta name="description" content="Classic Minesweeper written in Python and pygame. Free download for Windows and Mac, no Python needed. Beginner, Intermediate, Expert and custom boards, safe first click, open source.">
+  <meta name="description" content="Classic Minesweeper written in Python and pygame. Free download for Windows and Mac, no Python needed, plus a free classroom starter kit where students write the game logic.">
   <link rel="canonical" href="https://damg22.github.io/Minesweeper/">
 
   <!-- Link previews (Discord, Reddit, iMessage, X…) -->
@@ -138,6 +138,13 @@
       background: var(--code-bg); border: 1px solid var(--line); padding: 16px;
       overflow-x: auto; font: 14px/1.6 ui-monospace, Menlo, Consolas, monospace; margin: 0 0 16px;
     }
+    .teach { display: grid; grid-template-columns: 1.3fr 1fr; gap: 32px; align-items: start; }
+    .milestones { margin: 24px 0 0; padding-left: 22px; color: var(--muted); }
+    .milestones li { margin: 6px 0; }
+    .stub { margin: 0; font-size: 13px; }
+    .stub .c { color: var(--muted); }
+    .stub .todo { color: var(--accent); font-weight: 700; }
+    code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.92em; }
     footer { padding: 32px 0 48px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); }
 
     @media (max-width: 760px) {
@@ -145,6 +152,7 @@
       .hero .shot { max-width: 340px; }
       .downloads { max-width: none; }
       .gallery { grid-template-columns: 1fr; }
+      .teach { grid-template-columns: 1fr; }
       header nav a:not(:last-child) { display: none; }
     }
   </style>
@@ -160,6 +168,7 @@
     <nav>
       <a href="#how-to-play">How to play</a>
       <a href="#screenshots">Screenshots</a>
+      <a href="#teachers">For teachers</a>
       <a href="https://github.com/damg22/Minesweeper">GitHub</a>
     </nav>
   </div>
@@ -251,6 +260,49 @@
         <img class="shot" src="images/loss.png" width="1852" height="1196" loading="lazy" alt="Expert board after a loss showing all mines, the clicked mine in red and wrong flags crossed out.">
         <figcaption>Expert, after a loss: the clicked mine in red, wrong flags crossed out</figcaption>
       </figure>
+    </div>
+  </section>
+
+  <section id="teachers">
+    <h2>For teachers</h2>
+    <p class="note" style="margin:0 0 24px;max-width:62ch">Use Minesweeper as a programming assignment. Students get this complete, working game with the rules removed, and write them back in. They see every change on screen, and automated tests tell them when each part is right.</p>
+
+    <div class="teach">
+      <div>
+        <div class="grid">
+          <div class="card"><h3>What students practice</h3><p>2D grids and bounds checks, flood fill as graph search, state machines, constrained randomness, and working from a spec and tests. Late CS1 or CS2, about 4–8 hours.</p></div>
+          <div class="card"><h3>What you get</h3><p>The finished UI, a <code>game.py</code> with empty methods and clear docstrings, a student handout, and 32 pytest tests in four milestones, ready for autograding.</p></div>
+        </div>
+
+        <ol class="milestones">
+          <li><strong>Setup:</strong> place mines (first click always safe) and count neighbours</li>
+          <li><strong>Reveal:</strong> open cells, lose on a mine, flood-fill empty areas</li>
+          <li><strong>Flags:</strong> flag and question-mark cycle, the mine counter</li>
+          <li><strong>Win and chord:</strong> detect a win, open around a satisfied number</li>
+        </ol>
+
+        <div class="downloads" style="margin-top:24px">
+          <a class="btn" href="https://github.com/damg22/Minesweeper/releases/latest/download/minesweeper-starter.zip">
+            <span>Download the starter kit</span><small>.zip</small>
+          </a>
+        </div>
+        <p class="note"><a href="https://github.com/damg22/Minesweeper/blob/main/education/README.md">Instructor guide</a> (grading, GitHub Classroom, customising) · <a href="https://github.com/damg22/Minesweeper/blob/main/education/STUDENT_README.md">Student handout</a> · Free under the MIT license</p>
+      </div>
+
+      <pre class="stub"><code><span class="c"># minesweeper/game.py: what students start from</span>
+def reveal(self, row, col):
+    <span class="c">"""Called on left-click release over a cell.
+
+    - On the first reveal, place the mines,
+      avoiding this cell.
+    - A mine: mark it exploded; you lose.
+    - A number: reveal just that cell.
+    - A zero: flood-reveal every connected
+      zero and the numbers bordering them,
+      in all 8 directions.
+    """</span>
+    <span class="todo"># TODO</span>
+    pass</code></pre>
     </div>
   </section>
 

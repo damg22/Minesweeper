@@ -1,5 +1,5 @@
-# Builds Minesweeper for Windows and macOS.
-#  - Every push / PR: builds and smoke-tests the apps; downloads appear under the run's "Artifacts".
+# Builds Minesweeper for Windows and macOS, plus the classroom starter kit.
+#  - Every push / PR: builds and smoke-tests everything; downloads appear under the run's "Artifacts".
 #  - Pushing a tag like v1.0.0: also publishes a GitHub Release with the downloads attached.
 name: Build
 
@@ -76,9 +76,35 @@ jobs:
           name: ${{ matrix.asset }}
           path: dist/${{ matrix.asset }}
 
+  starter-kit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build the student starter kit
+        run: python education/build_starter.py dist
+
+      - name: Check the kit installs and its tests load
+        run: |
+          cd dist
+          unzip -q minesweeper-starter.zip
+          cd minesweeper-starter
+          pip install -r requirements.txt
+          # The stub is supposed to fail the tests; this only checks they all load.
+          pytest --collect-only -q
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: minesweeper-starter.zip
+          path: dist/minesweeper-starter.zip
+
   release:
     if: startsWith(github.ref, 'refs/tags/v')
-    needs: build
+    needs: [build, starter-kit]
     runs-on: ubuntu-latest
     permissions:
       contents: write

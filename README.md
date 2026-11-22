@@ -21,6 +21,20 @@ The apps aren't code-signed, so the first launch shows a warning:
 - **Mac:** unzip, then right-click `Minesweeper.app` → **Open** → **Open**. If macOS still
   blocks it, go to **System Settings → Privacy & Security** and click **Open Anyway**.
 
+## For teachers: use it as an assignment
+
+Minesweeper makes a great CS1/CS2 project: grids, flood fill (graph search),
+state machines and testing, in a game students want to finish. The
+**[starter kit](https://github.com/damg22/Minesweeper/releases/latest/download/minesweeper-starter.zip)**
+gives students this complete UI with an empty `game.py` to fill in, guided by
+four milestones and 32 automated tests (also usable for autograding).
+
+- **[Instructor guide](education/README.md):** learning goals, how to hand it out
+  (zip or GitHub Classroom), grading, and how to customise it
+- **[Student handout](education/STUDENT_README.md):** setup, rules, milestones and tips
+
+Free to use and adapt under the MIT license.
+
 ## Run from source
 
 ```bash
@@ -53,11 +67,19 @@ Then:
 ```
 main.py                  entry point / CLI flags
 minesweeper/
-  game.py                YOUR CODE: Cell, CellState, GameStatus, Game (stubs with TODOs)
+  game.py                game rules: Cell, CellState, GameStatus, Game
   ui.py                  window, input, rendering (reads Game state, calls Game actions)
   graphics.py            tile / mine / flag / LED / smiley drawing
   settings.py            sizes, colours, difficulty presets
   preview.py             hard-coded demo board used by --preview
+education/
+  README.md              instructor guide
+  STUDENT_README.md      student handout (becomes the kit's README)
+  game_stub.py           the empty game.py students start from
+  tests/                 milestone tests (pytest)
+  build_starter.py       builds dist/minesweeper-starter.zip
+docs/                    GitHub Pages website
+tools/make_screenshots.py  regenerates the website images from real games
 ```
 
 ## What the UI expects from `Game`
@@ -70,12 +92,13 @@ minesweeper/
 
 The timer starts when `status` becomes `PLAYING` and stops on `WON` or `LOST`.
 On `LOST` the UI shows all mines and crosses out wrong flags. On `WON` it shows
-every mine as a flag. Your logic only needs to set the state.
+every mine as a flag. The logic only needs to set the state.
 
 ## Publishing a new release
 
-GitHub Actions (`.github/workflows/build.yml`) builds the Windows and Mac apps on every
-push; the files show up under each run's **Artifacts** on the Actions tab.
+GitHub Actions (`.github/workflows/build.yml`) builds the Windows and Mac apps and the
+classroom starter kit on every push; the files show up under each run's **Artifacts**
+on the Actions tab.
 
 To publish a release that anyone can download, push a version tag:
 
@@ -84,4 +107,5 @@ git tag v1.0.0
 git push origin v1.0.0
 ```
 
-About 5 minutes later the Releases page has the three downloads attached.
+About 5 minutes later the Releases page has all four downloads attached: the three apps
+and `minesweeper-starter.zip`.
