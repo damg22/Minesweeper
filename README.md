@@ -11,11 +11,11 @@ Windows and Mac, no Python needed · **[Website](https://damg22.github.io/Minesw
 
 Grab the latest build from the **[Releases page](https://github.com/damg22/Minesweeper/releases/latest)**:
 
-| System | File |
-|---|---|
-| Windows | `Minesweeper-windows.exe` |
+| System                               | File                                  |
+| ------------------------------------ | ------------------------------------- |
+| Windows                              | `Minesweeper-windows.exe`             |
 | Mac with Apple Silicon (M1 or newer) | `Minesweeper-macos-apple-silicon.zip` |
-| Intel Mac | `Minesweeper-macos-intel.zip` |
+| Intel Mac                            | `Minesweeper-macos-intel.zip`         |
 
 The apps aren't code-signed, so the first launch shows a warning:
 
@@ -23,7 +23,7 @@ The apps aren't code-signed, so the first launch shows a warning:
 - **Mac:** unzip, then right-click `Minesweeper.app` → **Open** → **Open**. If macOS still
   blocks it, go to **System Settings → Privacy & Security** and click **Open Anyway**.
 
-## For teachers: use it as an assignment
+## For teachers: use it as an assignment / fun learning project
 
 Minesweeper makes a great CS1/CS2 project: grids, flood fill (graph search),
 state machines and testing, in a game students want to finish. The
@@ -55,14 +55,14 @@ Then:
 
 ## Controls
 
-| Input                                   | Action                         |
-|-----------------------------------------|--------------------------------|
-| Left click                              | reveal                         |
-| Right click / Ctrl+click / Cmd+click    | flag / question mark           |
-| Left+Right, middle click, Shift+click   | chord                          |
-| Smiley, `F2`, `N`                       | new game                       |
-| `1` / `2` / `3` or the menu bar         | beginner / intermediate / expert |
-| `Esc`                                   | quit                           |
+| Input                                 | Action                           |
+| ------------------------------------- | -------------------------------- |
+| Left click                            | reveal                           |
+| Right click / Ctrl+click / Cmd+click  | flag / question mark             |
+| Left+Right, middle click, Shift+click | chord                            |
+| Smiley, `F2`, `N`                     | new game                         |
+| `1` / `2` / `3` or the menu bar       | beginner / intermediate / expert |
+| `Esc`                                 | quit                             |
 
 ## Layout
 
