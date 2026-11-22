@@ -1,16 +1,31 @@
 # Minesweeper
 
-A classic-style Minesweeper in Python + pygame. The UI is done; the game logic in
-`minesweeper/game.py` is for you to write.
+A classic-style Minesweeper in Python + pygame.
 
-## Setup
+## Download and play (no Python needed)
+
+Grab the latest build from the **[Releases page](https://github.com/damg22/Minesweeper/releases/latest)**:
+
+| System | File |
+|---|---|
+| Windows | `Minesweeper-windows.exe` |
+| Mac with Apple Silicon (M1 or newer) | `Minesweeper-macos-apple-silicon.zip` |
+| Intel Mac | `Minesweeper-macos-intel.zip` |
+
+The apps aren't code-signed, so the first launch shows a warning:
+
+- **Windows:** on the "Windows protected your PC" screen, click **More info → Run anyway**.
+- **Mac:** unzip, then right-click `Minesweeper.app` → **Open** → **Open**. If macOS still
+  blocks it, go to **System Settings → Privacy & Security** and click **Open Anyway**.
+
+## Run from source
 
 ```bash
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 ```
 
-## Run
+Then:
 
 ```bash
 .venv/bin/python main.py                       # beginner 9x9, 10 mines
@@ -53,3 +68,17 @@ minesweeper/
 The timer starts when `status` becomes `PLAYING` and stops on `WON` or `LOST`.
 On `LOST` the UI shows all mines and crosses out wrong flags. On `WON` it shows
 every mine as a flag. Your logic only needs to set the state.
+
+## Publishing a new release
+
+GitHub Actions (`.github/workflows/build.yml`) builds the Windows and Mac apps on every
+push; the files show up under each run's **Artifacts** on the Actions tab.
+
+To publish a release that anyone can download, push a version tag:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+About 5 minutes later the Releases page has the three downloads attached.

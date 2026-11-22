@@ -1,0 +1,94 @@
+# Builds Minesweeper for Windows and macOS.
+#  - Every push / PR: builds and smoke-tests the apps; downloads appear under the run's "Artifacts".
+#  - Pushing a tag like v1.0.0: also publishes a GitHub Release with the downloads attached.
+name: Build
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            asset: Minesweeper-windows.exe
+          - os: macos-latest          # Apple Silicon (M1 and newer)
+            asset: Minesweeper-macos-apple-silicon.zip
+          - os: macos-15-intel        # Intel Macs
+            asset: Minesweeper-macos-intel.zip
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt pyinstaller==6.22.3
+
+      # ---------------------------------------------------------------- Windows
+      - name: Build .exe
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          pyinstaller --noconfirm --onefile --windowed --name Minesweeper main.py
+          Move-Item dist/Minesweeper.exe dist/${{ matrix.asset }}
+
+      - name: Smoke test .exe
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $env:SDL_VIDEODRIVER = "dummy"
+          $p = Start-Process dist/${{ matrix.asset }} -PassThru
+          Start-Sleep -Seconds 8
+          if ($p.HasExited) { throw "App exited early with code $($p.ExitCode)" }
+          Stop-Process -Id $p.Id
+
+      # ------------------------------------------------------------------ macOS
+      - name: Build .app
+        if: runner.os == 'macOS'
+        run: pyinstaller --noconfirm --windowed --name Minesweeper main.py
+
+      - name: Smoke test .app
+        if: runner.os == 'macOS'
+        run: |
+          SDL_VIDEODRIVER=dummy dist/Minesweeper.app/Contents/MacOS/Minesweeper &
+          PID=$!
+          sleep 8
+          kill -0 $PID || { echo "App exited early"; exit 1; }
+          kill $PID
+
+      - name: Zip .app
+        if: runner.os == 'macOS'
+        run: ditto -c -k --keepParent dist/Minesweeper.app dist/${{ matrix.asset }}
+
+      # ------------------------------------------------------------------ upload
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset }}
+          path: dist/${{ matrix.asset }}
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: assets
+          merge-multiple: true
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: assets/*
+          generate_release_notes: true
